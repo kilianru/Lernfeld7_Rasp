@@ -1,0 +1,80 @@
+#include <DHT.h>
+
+#define sensorPower 7
+#define sensorPin A1
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+//Value for storing waterlevel
+int val = 0;
+int IN1 = 2;
+int Pin1 = A0; 
+float value1 = 1;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(IN1, OUTPUT);
+  pinMode(Pin1, INPUT);
+
+
+//waterlevel sensor
+  pinMode(sensorPower, OUTPUT);
+
+  digitalWrite(IN1, HIGH);
+  digitalWrite(sensorPower, LOW);
+
+//temp
+  delay(500);
+  dht.begin(); //DHT11 Sensor starten
+  delay(1000);
+
+  delay(2000);
+}
+
+
+void loop() {
+ //Bodenfeuchtigkeit
+  Serial.print("MOISTURE LEVEL:");
+  value1 = analogRead(Pin1);
+  Serial.println(value1);
+  if(value1>500)
+  {
+      digitalWrite(IN1, LOW);
+  }
+  else
+  {
+    digitalWrite(IN1, HIGH);
+    }
+    Serial.println();
+//water level sensor
+  int level = readSensor();
+
+  Serial.print("Water Level: ");
+  Serial.print(level);
+
+//temp
+  float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
+
+  float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
+
+  Serial.print("Luftfeuchtigkeit: "); //Im seriellen Monitor den Text und 
+  Serial.print(Luftfeuchtigkeit); //die Dazugehörigen Werte anzeigen
+  Serial.println(" %");
+  Serial.print("Temperatur: ");
+  Serial.print(Temperatur);
+  Serial.println(" Grad Celsius");
+  delay(5000);
+
+  delay(1000);
+}
+
+//function for water level
+int readSensor() {
+  digitalWrite(sensorPower, HIGH);
+  delay(10);
+  val = analogRead(sensorPin);
+  digitalWrite(sensorPower, LOW);
+  return val;
+}
