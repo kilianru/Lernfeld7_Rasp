@@ -5,7 +5,7 @@ from drawnow import *
  
 tempF= []
 pressure=[]
-arduinoData = serial.Serial('com11', 115200) #Creating our serial object named arduinoData
+arduinoData = serial.Serial('com4', 115200) #Creating our serial object named arduinoData
 plt.ion() #Tell matplotlib you want interactive mode to plot live data
 cnt=0
  
